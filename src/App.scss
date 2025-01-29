@@ -1,9 +1,5 @@
 @use "./styles/variables" as vars;
 
-.photo-capture-app {
-    padding: vars.$spacing-16;
-}
-
 .title {
     font-size: vars.$spacing-24;
     font-weight: vars.$font-bold;
@@ -112,9 +108,5 @@
 
     .photo-grid {
         grid-template-columns: 1fr;
-    }
-
-    .photo-capture-app {
-        padding: 10px;
     }
 }
