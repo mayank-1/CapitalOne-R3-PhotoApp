@@ -13,6 +13,7 @@ const endpoint = 'https://www.example.com/'
 const App: React.FC = () => {
   const [cameraLoaded, setCameraLoaded] = useState(false);
   const [cameraError, setCameraError] = useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = useState<'user' | { exact: 'environment' }>('user')
 
   const steps = ["top", "bottom", "front", "back"] as const;
   const webcamRef = useRef<Webcam | null>(null);
@@ -33,6 +34,12 @@ const App: React.FC = () => {
     setCameraError(true)
   }
 
+  const toggleCamera = () => {
+    setCameraFacingMode((prevMode) =>
+      prevMode === "user" ? { exact: "environment" } : "user"
+    );
+  };
+
   if (cameraError) {
     return <div className="camera-error">
       <h2>Camera access was denied. Please enable camera permissions to proceed.</h2>
@@ -47,13 +54,18 @@ const App: React.FC = () => {
           <p className="instruction">
             Please capture a photo from: <strong>{steps[currentStepIndex].toUpperCase()}</strong>
           </p>
-          <Webcam ref={webcamRef} screenshotFormat="image/jpeg" className="webcam" onUserMedia={handleCameraLoad} onUserMediaError={handleCameraError} />
-          {cameraLoaded && <button
-            onClick={capturePhoto}
-            className={classNames("button", "capture-button")}
-          >
-            Capture {steps[currentStepIndex].toUpperCase()}
-          </button>}
+          <Webcam ref={webcamRef} videoConstraints={{ facingMode: cameraFacingMode }} screenshotFormat="image/jpeg" className="webcam" onUserMedia={handleCameraLoad} onUserMediaError={handleCameraError} />
+          {cameraLoaded && <div>
+            <button
+              onClick={capturePhoto}
+              className={classNames("button", "capture-button")}
+            >
+              Capture {steps[currentStepIndex].toUpperCase()}
+            </button>
+            <button className="button toggle-camera-button" onClick={toggleCamera}>
+              Switch to {cameraFacingMode === "user" ? "Rear" : "Front"} Camera
+            </button>
+          </div>}
         </div>
       ) : (
         <div className="upload-step">

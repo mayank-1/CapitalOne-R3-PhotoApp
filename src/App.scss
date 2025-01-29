@@ -48,6 +48,10 @@
         color: white;
     }
 
+    &.toggle-camera-button {
+        margin-left: 20px;
+    }
+
     &.upload-button {
         background-color: vars.$success-color;
         color: white;
