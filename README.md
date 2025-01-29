@@ -109,3 +109,7 @@ Install all dependencies using:
 ```bash
 npm install
 ```
+
+## Live Demo
+
+You can view the live demo of the project at [this link](https://wissen-captalone-photoapp.netlify.app/).
