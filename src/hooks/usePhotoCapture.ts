@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Webcam from "react-webcam";
+import { toast } from "react-toastify";
 
 const usePhotoCapture = (
   steps: readonly string[],
@@ -33,6 +34,7 @@ const usePhotoCapture = (
   };
 
   const resetProcess = () => {
+    toast.success("App reset successful");
     setCurrentStepIndex(0);
     setPhotos(steps.reduce((acc, step) => ({ ...acc, [step]: null }), {}));
     setLoading(false);
@@ -65,12 +67,13 @@ const usePhotoCapture = (
         body: formData,
       });
       if (response.ok) {
-        alert("Photos uploaded successfully!");
+        toast.success("Photos uploaded successfully!");
       } else {
-        alert("Failed to upload photos.");
+        toast.error("Failed to upload photos, try again");
       }
     } catch (error) {
       setLoading(false);
+      toast.error("Oops Something went wrong, please try again later");
       console.error("Error uploading photos:", error);
     } finally {
       setLoading(false);
