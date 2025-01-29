@@ -1,0 +1,116 @@
+@use "./styles/variables" as vars;
+
+.photo-capture-app {
+    padding: vars.$spacing-16;
+}
+
+.title {
+    font-size: vars.$spacing-24;
+    font-weight: vars.$font-bold;
+    margin-bottom: vars.$spacing-16;
+    text-align: center;
+}
+
+.capture-step,
+.upload-step {
+    margin-bottom: vars.$spacing-16;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .photo-actions {
+        & > button:last-child {
+            margin-left: 20px;
+        }
+    }
+}
+
+.instruction {
+    margin-bottom: vars.$spacing-8;
+}
+
+.webcam {
+    margin-bottom: vars.$spacing-16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.button {
+    padding: vars.$spacing-8 vars.$spacing-16;
+    border-radius: vars.$spacing-4;
+    font-weight: vars.$font-bold;
+    cursor: pointer;
+
+    &.capture-button {
+        background-color: vars.$primary-color;
+        color: white;
+    }
+
+    &.upload-button {
+        background-color: vars.$success-color;
+        color: white;
+
+        &.disabled {
+            cursor: not-allowed;
+        }
+    }
+}
+
+.success-message {
+    color: vars.$success-color;
+    margin-bottom: vars.$spacing-8;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: vars.$spacing-16;
+    margin-top: vars.$spacing-16;
+}
+
+.photo-preview {
+    text-align: center;
+}
+
+.photo-label {
+    font-weight: vars.$font-bold;
+    margin-bottom: vars.$spacing-8;
+}
+
+.photo-image {
+    border: 1px solid vars.$border-color;
+    border-radius: vars.$spacing-4;
+    width: 400px;
+    object-fit: cover;
+}
+
+.no-photo {
+    color: vars.$text-color;
+}
+
+.camera-error {
+    text-align: center;
+    margin-top: 50%;
+    color: vars.$color-danger;
+    background: vars.$color-white;
+}
+
+@media only screen and (max-width: 600px) {
+    .photo-image {
+        width: calc(100vw - 10px);
+    }
+
+    .webcam {
+        width: calc(100vw - 10px);
+    }
+
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-capture-app {
+        padding: 10px;
+    }
+}
