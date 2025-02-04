@@ -58,14 +58,27 @@ const usePhotoCapture = (
       for (const [angle, photo] of Object.entries(photos)) {
         if (photo) {
           const blob = dataURLtoBlob(photo);
-          console.log("**photo & blob: ", photo, blob);
           formData.append(angle, blob, `${angle}.jpg`);
         }
       }
+
+      // TODO: STOP THE API IF IT TAKES MORE THAN 3s of time to load data (Capital One Client round requirement)
+      setLoading((prev) => {
+        if (prev) {
+          setTimeout(() => {
+            toast.error("Api taking too long to process");
+            throw new Error("Api taking too long to process");
+          }, 3000);
+          return false;
+        }
+        return prev;
+      });
+
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
+
       if (response.ok) {
         toast.success("Photos uploaded successfully!");
       } else {
