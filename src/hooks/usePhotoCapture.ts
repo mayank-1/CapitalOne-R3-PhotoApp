@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { toast } from "react-toastify";
 
@@ -12,6 +12,7 @@ const usePhotoCapture = (
     steps.reduce((acc, step) => ({ ...acc, [step]: null }), {})
   );
   const [loading, setLoading] = useState(false);
+  const loadingRef: any = useRef(null);
 
   const capturePhoto = () => {
     const screenshot = webcamRef.current?.getScreenshot();
@@ -38,6 +39,7 @@ const usePhotoCapture = (
     setCurrentStepIndex(0);
     setPhotos(steps.reduce((acc, step) => ({ ...acc, [step]: null }), {}));
     setLoading(false);
+    loadingRef.current = false;
   };
 
   const dataURLtoBlob = (dataUrl: string): Blob => {
@@ -53,8 +55,12 @@ const usePhotoCapture = (
 
   const uploadPhotos = async () => {
     setLoading(true);
+    loadingRef.current = true;
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000); // Abort after 3 seconds
+    const timeoutId = setTimeout(() => {
+      if (loadingRef.current) controller.abort();
+    }, 3000); // Abort after 3 seconds
 
     try {
       const formData = new FormData();
@@ -86,6 +92,7 @@ const usePhotoCapture = (
       }
     } finally {
       setLoading(false);
+      loadingRef.current = false;
     }
   };
 
@@ -95,7 +102,7 @@ const usePhotoCapture = (
     capturePhoto,
     uploadPhotos,
     resetProcess,
-    loading,
+    loading: loadingRef.current,
   };
 };
 
