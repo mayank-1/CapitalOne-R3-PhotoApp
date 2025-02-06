@@ -102,7 +102,7 @@ const usePhotoCapture = (
     capturePhoto,
     uploadPhotos,
     resetProcess,
-    loading: loadingRef.current,
+    loading,
   };
 };
 
