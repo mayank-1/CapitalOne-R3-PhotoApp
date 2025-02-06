@@ -53,6 +53,9 @@ const usePhotoCapture = (
 
   const uploadPhotos = async () => {
     setLoading(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // Abort after 3 seconds
+
     try {
       const formData = new FormData();
       for (const [angle, photo] of Object.entries(photos)) {
@@ -61,18 +64,6 @@ const usePhotoCapture = (
           formData.append(angle, blob, `${angle}.jpg`);
         }
       }
-
-      // TODO: STOP THE API IF IT TAKES MORE THAN 3s of time to load data (Capital One Client round requirement)
-      setLoading((prev) => {
-        if (prev) {
-          setTimeout(() => {
-            toast.error("Api taking too long to process");
-            throw new Error("Api taking too long to process");
-          }, 3000);
-          return false;
-        }
-        return prev;
-      });
 
       const response = await fetch(endpoint, {
         method: "POST",
