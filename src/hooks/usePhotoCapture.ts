@@ -68,17 +68,22 @@ const usePhotoCapture = (
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         toast.success("Photos uploaded successfully!");
       } else {
-        toast.error("Failed to upload photos, try again");
+        toast.error("Failed to upload photos, try again.");
       }
-    } catch (error) {
-      setLoading(false);
-      toast.error("Oops Something went wrong, please try again later");
-      console.error("Error uploading photos:", error);
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        toast.error("API didn't load in 3 seconds");
+      } else {
+        toast.error("Oops! Something went wrong, please try again later.");
+      }
     } finally {
       setLoading(false);
     }
